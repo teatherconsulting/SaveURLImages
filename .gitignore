@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/SaveURLImages/bin/Debug
+/SaveURLImages/obj/Debug
+/.vs/SaveURLImages
