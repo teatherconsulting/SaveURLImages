@@ -17,7 +17,7 @@ namespace SaveURLImages
         {
 
             var fillbrush = Brushes.White;
-            if( args.Length == 1 )
+            if (args.Length == 1)
             {
                 var colour = args[0];
                 fillbrush = new SolidBrush(Color.FromArgb(
@@ -50,11 +50,12 @@ namespace SaveURLImages
             icons.Add(new CreateImage(@"ios\icons\icon-72@2x.png", 144, 144, 1));
             icons.Add(new CreateImage(@"ios\icons\icon-76.png", 76, 76, 1));
             icons.Add(new CreateImage(@"ios\icons\icon-76@2x.png", 152, 152, 1));
-            icons.Add(new CreateImage(@"ios\icons\icon-small.png", 29, 29, 1));
-            icons.Add(new CreateImage(@"ios\icons\icon-small@2x.png", 58, 58, 1));
-            icons.Add(new CreateImage(@"ios\icons\icon-small@3x.png", 87, 87, 1));
-            icons.Add(new CreateImage(@"ios\icons\icon.png", 57, 57, 1));
-            icons.Add(new CreateImage(@"ios\icons\icon@2x.png", 114, 114, 1));
+            //I added START to the images that needed reconverting to work with later code - Isaac 10/25 6:23 PM
+            icons.Add(new CreateImage(@"ios\icons\icon-smallSTART.png", 29, 29, 1));
+            icons.Add(new CreateImage(@"ios\icons\icon-small@2xSTART.png", 58, 58, 1));
+            icons.Add(new CreateImage(@"ios\icons\icon-small@3xSTART.png", 87, 87, 1));
+            icons.Add(new CreateImage(@"ios\icons\iconSTART.png", 57, 57, 1));
+            icons.Add(new CreateImage(@"ios\icons\icon@2xSTART.png", 113+1, 114, 1));
             icons.Add(new CreateImage(@"ios\icons\icon-83.5@2x.png", 167, 167, 1));
 
             List<CreateImage> splashScreens = new List<CreateImage>();
@@ -86,7 +87,7 @@ namespace SaveURLImages
             splashScreens.Add(new CreateImage(@"ios\splash\Default@2x~ipad~anyany.png", 2732, 2732, .5));
             splashScreens.Add(new CreateImage(@"ios\splash\Default@2x~ipad~comany.png", 1278, 2732, .5));
 
-            for ( int i = 0; i < icons.Count; i++ )
+            for (int i = 0; i < icons.Count; i++)
             {
                 if (!Directory.Exists(Path.GetDirectoryName(icons[i].filepath)))
                 {
@@ -94,6 +95,63 @@ namespace SaveURLImages
                 }
                 Resize(pathToIcon, icons[i].filepath, icons[i].height);
             }
+
+
+            /*   This is the start of Isaac's Changes.
+             The only pictures that had problems were ones with random odd numbers, 
+             and the 32-bit Integer couldn't hold the full decimal so it sumplified to the nearest 
+             pixel. I converted them twice so that they would come out as the correct pixels.
+             -----Isaac 10/25 6:25 PM  */
+
+
+            List<CreateImage> iconsToSize = new List<CreateImage>();
+            iconsToSize.Add(new CreateImage(@"ios\icons\icon-smallSTART.png", 290, 290, 1));
+            iconsToSize.Add(new CreateImage(@"ios\icons\icon-small@2xSTART.png", 58, 58, 1));
+            iconsToSize.Add(new CreateImage(@"ios\icons\icon-small@3xSTART.png", 87, 87, 1));
+            iconsToSize.Add(new CreateImage(@"ios\icons\iconSTART.png", 57, 57, 1));
+            iconsToSize.Add(new CreateImage(@"ios\icons\icon@2xSTART.png", 228, 228, 1));
+
+            File.Delete(@"ios\icons\icon-small.png");
+            File.Delete(@"ios\icons\icon-small@2x.png");
+            File.Delete(@"ios\icons\icon-small@3x.png");
+            File.Delete(@"ios\icons\icon.png");
+            File.Delete(@"ios\icons\icon@2x.png");
+            for (int i = 0; i < 5; i++)
+            {
+                string newName = " ";
+                int size = 1000;
+                    if (!Directory.Exists(Path.GetDirectoryName(iconsToSize[i].filepath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(iconsToSize[i].filepath));
+                    }
+
+                switch(i){
+                    case 0:
+                        newName = @"ios\icons\icon-small.png";
+                        size = 28 + 1;
+                        break;
+                    case 1:
+                        newName = @"ios\icons\icon-small@2x.png";
+                        size = 57 + 1;
+                        break;
+                    case 2:
+                        newName = @"ios\icons\icon-small@3x.png";
+                        size = 86 + 1;
+                        break;
+                    case 3:
+                        newName = @"ios\icons\icon.png";
+                        size = 56 + 1;
+                        break;
+                    case 4:
+                        newName = @"ios\icons\icon@2x.png";
+                        size = 114;
+                        break;
+                                 }
+                    Resize(iconsToSize[i].filepath, newName, size);
+                    File.Delete(iconsToSize[i].filepath);
+             }
+    // That is the end of Isaac's Changes
+
             File.Copy(pathToLogo, "logo.png");
             for (int i = 0; i < splashScreens.Count; i++)
             {
